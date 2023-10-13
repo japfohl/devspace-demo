@@ -16,7 +16,7 @@ components:
 
   - name: test-env
     container:
-      image: default-route-openshift-image-registry.apps.deoggyu0.eastus.aroapp.io/pix-devspaces/pix-playwright:latest
+      image: image-registry.openshift-image-registry.svc:5000/pix-devspaces/pix-playwright
       sourceMapping: /projects
       mountSources: true
 

@@ -3,27 +3,22 @@ metadata:
   name: demo
   version: 0.0.1
 components:
-  - container:
+  - name: runtime-build
+    image:
+      imageName: dev-runtime
+      autoBuild: true
+      dockerfile:
+        uri: docker/DockerFile
+        
+  - name: runtime
+    container:
       endpoints:
-        # this creates a route suffixed with "http-3000"
-        - name: http-3000
+        - name: app-server
           targetPort: 3000
-        # this creates a route suffixed with "ws-3000"
-        - name: ws-3000
-          targetPort: 3000
-          protocol: ws
+          protocol: https
       image: quay.io/devfile/universal-developer-image:ubi8-latest
       memoryLimit: 4Gi
       memoryRequest: 2Gi
-      volumeMounts:
-        - name: pnpm-cache
-          path: /home/user/.local/share/pnpm
-        - name: pnpm-cache
-          path: ${PROJECT_SOURCE}/node_modules
-    name: runtime
-  - name: pnpm-cache
-    volume:
-      size: 2Gi
 commands:
   # set up project packages manager and install dependencies
   - exec:

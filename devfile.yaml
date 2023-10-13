@@ -3,13 +3,6 @@ metadata:
   name: demo
   version: 0.0.1
 components:
-  - name: runtime-build
-    image:
-      imageName: dev-runtime
-      autoBuild: true
-      dockerfile:
-        uri: docker/DockerFile
-        
   - name: runtime
     container:
       endpoints:
@@ -19,6 +12,13 @@ components:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
       memoryLimit: 4Gi
       memoryRequest: 2Gi
+      
+  - name: test-env
+    container:
+      image: mcr.microsoft.com/playwright:v1.39.0-jammy
+      command: ['tail', '-f', '/dev/null']
+      sourceMapping: /projects
+      mountSources: true
 commands:
   # set up project packages manager and install dependencies
   - exec:

@@ -2,6 +2,7 @@ schemaVersion: 2.2.0
 metadata:
   name: demo
   version: 0.0.1
+
 components:
   - name: runtime
     container:
@@ -12,26 +13,35 @@ components:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
       memoryLimit: 4Gi
       memoryRequest: 2Gi
-      
+
   - name: test-env
     container:
-      image: mcr.microsoft.com/playwright:v1.39.0-jammy
-      command: ['tail', '-f', '/dev/null']
+      image: default-route-openshift-image-registry.apps.deoggyu0.eastus.aroapp.io/pix-devspaces/pix-playwright:latest
       sourceMapping: /projects
       mountSources: true
+
 commands:
   # set up project packages manager and install dependencies
-  - exec:
-      commandLine: "bash $PROJECT_SOURCE/scripts/init"
+  - id: npm-install
+    exec:
+      commandLine: "npm install"
       component: runtime
-    id: init
+      workingDir: ${PROJECT_SOURCE}
+
   # run development server
-  - exec:
-      commandLine: "pnpm run --filter web-app dev"
+  - id: dev
+    exec:
+      commandLine: "npm run dev -w=web-app"
       component: runtime
       hotReloadCapable: true
       workingDir: ${PROJECT_SOURCE}
-    id: dev
+  
+  # run e2e tests in testenv
+  - id: e2e
+    exec:
+      commandLine: 'npm run e2e -w=web-app'
+      component: test-env
+      workingDir: ${PROJECT_SOURCE}
 events:
   postStart:
-    - init
+    - npm-install

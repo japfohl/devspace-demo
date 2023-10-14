@@ -1,4 +1,5 @@
 schemaVersion: 2.2.0
+
 metadata:
   name: demo
   version: 0.0.1
@@ -16,7 +17,7 @@ components:
 
   - name: test-env
     container:
-      image: image-registry.openshift-image-registry.svc:5000/pix-devspaces/pix-playwright
+      image: docker.io/joepfohl/playwright-headed-root:latest
       sourceMapping: /projects
       mountSources: true
 
@@ -42,6 +43,7 @@ commands:
       commandLine: 'npm run e2e -w=web-app'
       component: test-env
       workingDir: ${PROJECT_SOURCE}
+      
 events:
   postStart:
     - npm-install

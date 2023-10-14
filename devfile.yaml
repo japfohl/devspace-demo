@@ -20,6 +20,8 @@ components:
       image: docker.io/joepfohl/playwright-headed-root:latest
       sourceMapping: /projects
       mountSources: true
+      command: ['tail', '-f', '/dev/null']
+      
 
 commands:
   # set up project packages manager and install dependencies
@@ -43,7 +45,7 @@ commands:
       commandLine: 'npm run e2e -w=web-app'
       component: test-env
       workingDir: ${PROJECT_SOURCE}
-      
+
 events:
   postStart:
     - npm-install

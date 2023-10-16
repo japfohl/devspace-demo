@@ -17,7 +17,7 @@ components:
 
   - name: test-env
     container:
-      image: docker.io/joepfohl/playwright-headed-root:latest
+      image: mcr.microsoft.com/playwright:v1.39.0-jammy
       sourceMapping: /projects
       mountSources: true
       command: ['tail', '-f', '/dev/null']
